@@ -52,7 +52,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .left{display:flex;flex-direction:column;overflow:hidden}
 
 /* Sección live */
-.live{padding:10px 14px 8px;border-bottom:1px solid var(--border);flex-shrink:0}
+.live{padding:10px 10px 8px;border-bottom:1px solid var(--border);flex-shrink:0;min-width:0;overflow:hidden}
 
 /* Métricas */
 .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-bottom:8px;border-radius:4px;overflow:hidden}
@@ -62,8 +62,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .ok{color:var(--success)}.err{color:var(--danger)}
 
 /* 3 ventanas mini */
-.windows{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:8px}
-.win{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:5px 5px 3px}
+.windows{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:8px;min-width:0}
+.win{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:5px 4px 3px;min-width:0;overflow:hidden}
 .win.best{border-color:var(--accent);background:#0c1d34}
 .win-title{font-family:var(--mono);font-size:8px;color:var(--muted);margin-bottom:3px;display:flex;justify-content:space-between}
 .win-title b{color:var(--accent2);font-weight:600}
