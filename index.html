@@ -6,27 +6,19 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="PigTracker">
-<meta name="theme-color" content="#070e1c">
+<meta name="theme-color" content="#e6edf7">
 <link rel="manifest" href="manifest.json">
 <title>PigTracker V2</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:      #070e1c;
-  --bg2:     #0d1a2e;
-  --bg3:     #122038;
-  --border:  #1e3050;
-  --border2: #2a4268;
-  --accent:  #0ea5e9;
-  --accent2: #38bdf8;
-  --success: #10b981;
-  --warn:    #f59e0b;
-  --danger:  #ef4444;
-  --text:    #e2eaf6;
-  --muted:   #6b8ab0;
-  --mono:    'IBM Plex Mono', monospace;
-  --sans:    'IBM Plex Sans', sans-serif;
+:root{
+  --bg:#e6edf7;--bg2:#f0f5fc;--bg3:#dce6f3;
+  --border:#aabdd8;--border2:#7a9ec0;
+  --accent:#00538a;--accent2:#007ba7;
+  --success:#005f45;--warn:#7a4800;--danger:#b03000;
+  --text:#0a1628;--muted:#42607e;
+  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);overflow:hidden}
@@ -51,13 +43,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .btn:disabled{opacity:.3;cursor:default}
 .btn.connected{border-color:var(--success);color:var(--success)}
 
-/* Body layout */
+/* Body: columna izq + columna der */
 .body{display:grid;overflow:hidden}
 @media(min-width:680px){.body{grid-template-columns:1fr 300px}}
 @media(max-width:679px){.body{grid-template-rows:auto 1fr}}
 
 /* Panel izquierdo */
 .left{display:flex;flex-direction:column;overflow:hidden}
+
+/* Sección live */
 .live{padding:10px 14px 8px;border-bottom:1px solid var(--border);flex-shrink:0}
 
 /* Métricas */
@@ -65,19 +59,27 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .metric{background:var(--bg2);padding:6px 8px}
 .metric-label{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px}
 .metric-value{font-family:var(--mono);font-size:15px;font-weight:600;line-height:1}
-.ok{color:var(--success)}.warn{color:var(--warn)}.err{color:var(--danger)}
+.ok{color:var(--success)}.err{color:var(--danger)}
 
-/* Ventanas mini */
-.windows{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+/* 3 ventanas mini */
+.windows{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:8px}
 .win{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:5px 5px 3px}
 .win.best{border-color:var(--accent);background:#0c1d34}
 .win-title{font-family:var(--mono);font-size:8px;color:var(--muted);margin-bottom:3px;display:flex;justify-content:space-between}
 .win-title b{color:var(--accent2);font-weight:600}
-.cv{position:relative;height:65px}
+.cv{position:relative;height:60px}
 .cv canvas{width:100%!important;height:100%!important}
 
+/* Gráfico principal mejor ventana */
+.main-chart-card{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:8px 8px 5px;margin-bottom:4px}
+.main-chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
+.main-chart-title{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.peak-tag{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px;border:1px solid var(--border2);color:var(--accent2);background:rgba(0,83,138,0.08)}
+.main-cv{position:relative;height:120px}
+.main-cv canvas{width:100%!important;height:100%!important}
+
 /* Progress */
-.dl-prog{height:2px;background:var(--border);border-radius:1px;overflow:hidden;margin-top:6px;opacity:0;transition:opacity .3s}
+.dl-prog{height:2px;background:var(--border);border-radius:1px;overflow:hidden;margin-top:4px;opacity:0;transition:opacity .3s}
 .dl-prog.active{opacity:1}
 .dl-bar{height:100%;background:var(--accent);width:0;transition:width .4s}
 
@@ -110,7 +112,6 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 .placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px}
 .placeholder::before{content:'';display:block;width:24px;height:1px;background:var(--border2)}
 
-/* Scrollbar */
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
@@ -136,26 +137,42 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
   <!-- Panel izquierdo -->
   <div class="left">
     <div class="live">
+
+      <!-- Métricas -->
       <div class="metrics">
         <div class="metric"><div class="metric-label">Frec.</div><div class="metric-value" id="mFreq">— Hz</div></div>
         <div class="metric"><div class="metric-label">Mag</div><div class="metric-value" id="mMag">—</div></div>
         <div class="metric"><div class="metric-label">SNR</div><div class="metric-value" id="mSnr">—</div></div>
         <div class="metric"><div class="metric-label">Detección</div><div class="metric-value err" id="mDet">NO</div></div>
       </div>
+
+      <!-- 3 ventanas mini -->
       <div class="windows">
         <div class="win" id="wc0"><div class="win-title">V1/3 <b id="b0">— Hz</b></div><div class="cv"><canvas id="c0"></canvas></div></div>
         <div class="win" id="wc1"><div class="win-title">V2/3 <b id="b1">— Hz</b></div><div class="cv"><canvas id="c1"></canvas></div></div>
         <div class="win" id="wc2"><div class="win-title">V3/3 <b id="b2">— Hz</b></div><div class="cv"><canvas id="c2"></canvas></div></div>
       </div>
+
+      <!-- Gráfico principal mejor ventana -->
+      <div class="main-chart-card">
+        <div class="main-chart-header">
+          <div class="main-chart-title">Mejor ventana — 0 a 75 Hz &nbsp;|&nbsp; Δf = 2.34 Hz/bin</div>
+          <div class="peak-tag" id="peakTag">P1: — Hz</div>
+        </div>
+        <div class="main-cv"><canvas id="cMain"></canvas></div>
+      </div>
+
       <div class="dl-prog" id="dlProg"><div class="dl-bar" id="dlBar"></div></div>
     </div>
+
+    <!-- Historial -->
     <div class="hist">
       <div class="hist-hdr"><span>Historial</span><span class="hist-count" id="hCount">0 registros</span></div>
       <div class="hist-list" id="hList"><div class="hist-empty" id="hEmpty">Sin detecciones guardadas</div></div>
     </div>
   </div>
 
-  <!-- Panel derecho -->
+  <!-- Panel derecho detalle -->
   <div class="right">
     <div class="detail-hdr">
       <div class="detail-label">Detalle de detección</div>
@@ -181,58 +198,51 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 
 <script>
 'use strict';
-
-// ── Constantes ──
-const SVC_UUID       = '12345678-1234-1234-1234-123456789abc';
-const CHAR_FFT_UUID  = 'abcd1234-ab12-cd34-ef56-abcdef123456';
-const CHAR_HIST_UUID = 'abcd1234-ab12-cd34-ef56-abcdef123457';
-const N_BINS=32, BIN_RES=150/64, TARGET=22;
+const SVC_UUID='12345678-1234-1234-1234-123456789abc';
+const CHAR_FFT_UUID='abcd1234-ab12-cd34-ef56-abcdef123456';
+const CHAR_HIST_UUID='abcd1234-ab12-cd34-ef56-abcdef123457';
+const N_BINS=32,BIN_RES=150/64,TARGET=22;
 const BIN_LO=Math.max(1,Math.round((TARGET-2.5)/BIN_RES));
 const BIN_HI=Math.min(N_BINS-1,Math.round((TARGET+2.5)/BIN_RES));
 const BIN_TGT=Math.round(TARGET/BIN_RES);
 const LABELS=Array.from({length:N_BINS},(_,i)=>(i*BIN_RES).toFixed(1));
 
-// ── Estado ──
 let bleDevice=null,charFFT=null,charHist=null;
 let connected=false,isDemo=true;
 let spectra=[new Float32Array(N_BINS),new Float32Array(N_BINS),new Float32Array(N_BINS)];
 let bestWin=0,demoPhase=0,lastDemoUpd=[0,0,0];
-let historial=[],selectedIdx=-1;
-let dlTotal=0;
+let historial=[],selectedIdx=-1,dlTotal=0;
 
-// ── IndexedDB ──
+// IndexedDB
 const DB='pigtracker',STORE='hist';
 let db=null;
 (async()=>{
   db=await new Promise((r,j)=>{
     const q=indexedDB.open(DB,1);
     q.onupgradeneeded=e=>e.target.result.createObjectStore(STORE,{keyPath:'ts'});
-    q.onsuccess=e=>r(e.target.result);
-    q.onerror=j;
+    q.onsuccess=e=>r(e.target.result);q.onerror=j;
   }).catch(()=>null);
   if(!db)return;
   const items=await new Promise(r=>{
     const q=db.transaction(STORE,'readonly').objectStore(STORE).getAll();
-    q.onsuccess=e=>r(e.target.result||[]);
-    q.onerror=()=>r([]);
+    q.onsuccess=e=>r(e.target.result||[]);q.onerror=()=>r([]);
   });
   if(items.length){historial=items.sort((a,b)=>a.ts>b.ts?-1:1);renderHist();}
 })();
-
 function saveDB(items){
   if(!db)return;
   const tx=db.transaction(STORE,'readwrite'),st=tx.objectStore(STORE);
   items.forEach(i=>st.put(i));
 }
 
-// ── Plugin banda objetivo ──
+// Plugin banda objetivo
 const bandPlugin=id=>({id,beforeDraw(c){
   const{ctx,chartArea:{top,bottom},scales:{x}}=c;
   if(!x)return;
   const xL=x.getPixelForValue(BIN_LO),xH=x.getPixelForValue(BIN_HI),xT=x.getPixelForValue(BIN_TGT);
   ctx.save();
-  ctx.fillStyle='rgba(14,165,233,0.10)';ctx.fillRect(xL,top,xH-xL,bottom-top);
-  ctx.strokeStyle='rgba(14,165,233,0.4)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+  ctx.fillStyle='rgba(0,83,138,0.10)';ctx.fillRect(xL,top,xH-xL,bottom-top);
+  ctx.strokeStyle='rgba(0,83,138,0.45)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
   ctx.beginPath();ctx.moveTo(xT,top);ctx.lineTo(xT,bottom);ctx.stroke();
   ctx.setLineDash([]);ctx.restore();
 }});
@@ -242,39 +252,52 @@ const miniOpts=()=>({responsive:true,maintainAspectRatio:false,animation:false,
   scales:{x:{display:false},y:{display:false,min:0,max:800}}
 });
 
-// ── Charts mini ──
-const COLS=['#0ea5e9','#38bdf8','#7dd3fc'];
+const mainOpts=()=>({responsive:true,maintainAspectRatio:false,animation:false,
+  plugins:{legend:{display:false},tooltip:{
+    backgroundColor:'#f0f5fc',borderColor:'#aabdd8',borderWidth:1,
+    titleColor:'#42607e',bodyColor:'#00538a',
+    titleFont:{family:'IBM Plex Mono',size:9},bodyFont:{family:'IBM Plex Mono',size:10},
+    callbacks:{
+      title:i=>(i[0].dataIndex*BIN_RES).toFixed(2)+' Hz',
+      label:i=>i.datasetIndex===0?' mag: '+i.raw.toFixed(1):null,
+      filter:i=>i.datasetIndex===0
+    }
+  }},
+  scales:{
+    x:{grid:{color:'#aabdd8'},ticks:{color:'#42607e',font:{family:'IBM Plex Mono',size:8},maxTicksLimit:10,maxRotation:0,callback:(v,i)=>i%4===0?Math.round(i*BIN_RES):''},border:{color:'#aabdd8'}},
+    y:{min:0,max:800,grid:{color:'#aabdd8'},ticks:{color:'#42607e',font:{family:'IBM Plex Mono',size:8},maxTicksLimit:5,callback:v=>v>=1000?(v/1000).toFixed(0)+'k':v},border:{color:'#aabdd8'}}
+  }
+});
+
+// Charts mini
+const COLS=['#00538a','#007ba7','#4a90b8'];
 const mCharts=COLS.map((c,w)=>new Chart(document.getElementById('c'+w),{
   type:'line',
   data:{labels:LABELS,datasets:[{data:new Array(N_BINS).fill(0),borderColor:c,borderWidth:1.2,pointRadius:0,fill:false,tension:0.3}]},
-  options:miniOpts(),
-  plugins:[bandPlugin('b'+w)]
+  options:miniOpts(),plugins:[bandPlugin('b'+w)]
 }));
 
-// ── Chart detalle ──
+// Chart principal (mejor ventana)
+const cMain=new Chart(document.getElementById('cMain'),{
+  type:'line',
+  data:{labels:LABELS,datasets:[
+    {data:new Array(N_BINS).fill(0),borderColor:'#007ba7',borderWidth:1.8,pointRadius:0,fill:true,backgroundColor:'rgba(0,83,138,0.07)',tension:0.3},
+    {data:new Array(N_BINS).fill(null),borderWidth:0,pointRadius:6,pointBackgroundColor:'#b03000',pointBorderColor:'#e6edf7',pointBorderWidth:1.5,fill:false,showLine:false}
+  ]},
+  options:mainOpts(),plugins:[bandPlugin('bm')]
+});
+
+// Chart detalle historial
 const cDetail=new Chart(document.getElementById('cDetail'),{
   type:'line',
   data:{labels:LABELS,datasets:[
-    {data:new Array(N_BINS).fill(0),borderColor:'#0ea5e9',borderWidth:1.8,pointRadius:0,fill:true,backgroundColor:'rgba(14,165,233,0.08)',tension:0.3},
-    {data:new Array(N_BINS).fill(null),borderWidth:0,pointRadius:5,pointBackgroundColor:'#f59e0b',pointBorderColor:'#070e1c',pointBorderWidth:1.5,fill:false,showLine:false}
+    {data:new Array(N_BINS).fill(0),borderColor:'#00538a',borderWidth:1.8,pointRadius:0,fill:true,backgroundColor:'rgba(0,83,138,0.08)',tension:0.3},
+    {data:new Array(N_BINS).fill(null),borderWidth:0,pointRadius:5,pointBackgroundColor:'#7a4800',pointBorderColor:'#e6edf7',pointBorderWidth:1.5,fill:false,showLine:false}
   ]},
-  options:{
-    responsive:true,maintainAspectRatio:false,animation:false,
-    plugins:{legend:{display:false},tooltip:{
-      backgroundColor:'#0d1a2e',borderColor:'#1e3050',borderWidth:1,
-      titleColor:'#6b8ab0',bodyColor:'#0ea5e9',
-      titleFont:{family:'IBM Plex Mono',size:9},bodyFont:{family:'IBM Plex Mono',size:10},
-      callbacks:{title:i=>(i[0].dataIndex*BIN_RES).toFixed(2)+' Hz',label:i=>i.datasetIndex===0?' mag: '+i.raw.toFixed(1):null,filter:i=>i.datasetIndex===0}
-    }},
-    scales:{
-      x:{grid:{color:'#1e3050'},ticks:{color:'#6b8ab0',font:{family:'IBM Plex Mono',size:8},maxTicksLimit:8,maxRotation:0,callback:(v,i)=>i%4===0?Math.round(i*BIN_RES):''},border:{color:'#1e3050'}},
-      y:{min:0,max:800,grid:{color:'#1e3050'},ticks:{color:'#6b8ab0',font:{family:'IBM Plex Mono',size:8},maxTicksLimit:5,callback:v=>v>=1000?(v/1000).toFixed(0)+'k':v},border:{color:'#1e3050'}}
-    }
-  },
-  plugins:[bandPlugin('bd')]
+  options:mainOpts(),plugins:[bandPlugin('bd')]
 });
 
-// ── Helpers ──
+// Helpers
 function bandE(s){let e=0;for(let i=BIN_LO;i<=BIN_HI;i++)e+=s[i]*s[i];return e;}
 function findPk(arr,n=1){
   const ps=[];
@@ -284,10 +307,11 @@ function findPk(arr,n=1){
 function snr(s,b){let sm=0,c=0;for(let i=1;i<N_BINS;i++)if(Math.abs(i-b)>2){sm+=s[i];c++;}const n=c?sm/c:0.001;return n?(s[b]/n).toFixed(1):'—';}
 function proc(raw,w){for(let i=0;i<N_BINS;i++)spectra[w][i]=spectra[w][i]*0.2+raw[i]*0.8;}
 
-// ── Update live ──
+// Update live
 function updateLive(){
   let maxE=-1;
   for(let w=0;w<3;w++){const e=bandE(spectra[w]);if(e>maxE){maxE=e;bestWin=w;}}
+  // Mini charts
   for(let w=0;w<3;w++){
     mCharts[w].data.datasets[0].data=Array.from(spectra[w]);
     mCharts[w].update('none');
@@ -295,20 +319,31 @@ function updateLive(){
     document.getElementById('b'+w).textContent=pk.length?(pk[0].b*BIN_RES).toFixed(1)+' Hz':'— Hz';
     document.getElementById('wc'+w).classList.toggle('best',w===bestWin);
   }
+  // Chart principal — mejor ventana
   const best=spectra[bestWin];
   const pks=findPk(best);
+  const maxVal=Math.max(...best,100);
+  cMain.options.scales.y.max=Math.ceil(maxVal*1.2);
+  cMain.data.datasets[0].data=Array.from(best);
+  // Pico principal marcado en rojo
+  const pd=new Array(N_BINS).fill(null);
+  if(pks.length)pd[pks[0].b]=pks[0].v;
+  cMain.data.datasets[1].data=pd;
+  cMain.update('none');
+  // Métricas
   if(pks.length){
-    document.getElementById('mFreq').textContent=(pks[0].b*BIN_RES).toFixed(2)+' Hz';
-    document.getElementById('mMag').textContent=pks[0].v.toFixed(0);
-    document.getElementById('mSnr').textContent=snr(best,pks[0].b);
+    const p=pks[0];
+    document.getElementById('mFreq').textContent=(p.b*BIN_RES).toFixed(2)+' Hz';
+    document.getElementById('mMag').textContent=p.v.toFixed(0);
+    document.getElementById('mSnr').textContent=snr(best,p.b);
+    document.getElementById('peakTag').textContent='P1: '+(p.b*BIN_RES).toFixed(2)+' Hz';
   }
 }
 
-// ── Demo ──
+// Demo
 function demoW(w){
   demoPhase+=0.01;
-  const out=new Float32Array(N_BINS);
-  const a=[420,680,280];
+  const out=new Float32Array(N_BINS),a=[420,680,280];
   for(let i=1;i<N_BINS;i++){
     let v=a[w]*Math.exp(-Math.pow((i-BIN_TGT)/1.1,2));
     v+=150*Math.exp(-Math.pow((i-18)/2,2))+60*Math.random();
@@ -322,7 +357,8 @@ function loop(ts){
   requestAnimationFrame(loop);
   if(ts-lastCk>500){
     lastCk=ts;
-    document.getElementById('clock').textContent=new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    document.getElementById('clock').textContent=
+      new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
   }
   if(!isDemo)return;
   for(let w=0;w<3;w++){
@@ -332,7 +368,7 @@ function loop(ts){
 }
 requestAnimationFrame(loop);
 
-// ── BLE ──
+// BLE
 async function toggleBLE(){
   if(connected){disconn();return;}
   try{
@@ -380,7 +416,6 @@ function onFFT(e){
   proc(raw,w);updateLive();
 }
 
-// ── Protocolo historial ──
 async function descargarHistorial(){
   if(!charHist||!connected)return;
   dlTotal=0;
@@ -429,7 +464,7 @@ function onDisc(){
 function disconn(){if(bleDevice?.gatt?.connected)bleDevice.gatt.disconnect();onDisc();}
 function setS(m){document.getElementById('bleStatus').textContent=m;}
 
-// ── Historial UI ──
+// Historial UI
 function formatTS(iso){
   try{
     const d=new Date(iso);
@@ -437,14 +472,11 @@ function formatTS(iso){
     return ar.toISOString().replace('T',' ').substring(5,16)+' AR';
   }catch{return iso;}
 }
-
 function renderHist(){
-  const list=document.getElementById('hList');
-  const empty=document.getElementById('hEmpty');
+  const list=document.getElementById('hList'),empty=document.getElementById('hEmpty');
   document.getElementById('hCount').textContent=historial.length+' registro'+(historial.length!==1?'s':'');
   if(!historial.length){empty.style.display='block';return;}
-  empty.style.display='none';
-  list.innerHTML='';
+  empty.style.display='none';list.innerHTML='';
   historial.forEach((r,i)=>{
     const d=document.createElement('div');
     d.className='hist-item'+(i===selectedIdx?' sel':'');
@@ -452,12 +484,10 @@ function renderHist(){
     d.innerHTML=`<div>
       <div class="hist-ts">${formatTS(r.ts)}</div>
       <div class="hist-m">Mag: ${r.mag?.toFixed(0)||'—'}  SNR: ${r.snr?.toFixed(1)||'—'}  ${r.ratio?(r.ratio*100).toFixed(0)+'%':'—'}</div>
-    </div>
-    <div class="hist-badge">22 Hz</div>`;
+    </div><div class="hist-badge">22 Hz</div>`;
     list.appendChild(d);
   });
 }
-
 function selectDet(i){
   selectedIdx=i;renderHist();
   const r=historial[i];if(!r)return;
@@ -481,7 +511,6 @@ function selectDet(i){
   cDetail.update('none');
 }
 
-// ── Service Worker ──
 if('serviceWorker'in navigator){
   navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
