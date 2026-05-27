@@ -1,7 +1,7 @@
 // sw.js — Service Worker PigTracker V2
 // Cache offline: index.html + Chart.js + fuentes
 
-const CACHE = 'pigtracker-v2-1';
+const CACHE = 'pigtracker-v2-5';
 const ASSETS = [
   '/',
   '/index.html',
