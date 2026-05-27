@@ -16,101 +16,198 @@
   --bg:#e6edf7;--bg2:#f0f5fc;--bg3:#dce6f3;
   --border:#aabdd8;--border2:#7a9ec0;
   --accent:#00538a;--accent2:#007ba7;
-  --success:#005f45;--warn:#7a4800;--danger:#b03000;
+  --success:#005f45;--danger:#b03000;
   --text:#0a1628;--muted:#42607e;
-  --mono:'IBM Plex Mono',monospace;--sans:'IBM Plex Sans',sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'IBM Plex Sans',sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);overflow:hidden;overflow-x:hidden}
-
-.app{display:grid;grid-template-rows:44px auto 1fr;height:100vh;height:100dvh;width:100%;overflow:hidden}
+html,body{
+  height:100%;width:100%;max-width:100%;
+  background:var(--bg);color:var(--text);
+  font-family:var(--sans);
+  overflow:hidden;
+}
+.app{
+  display:grid;
+  grid-template-rows:44px auto 1fr;
+  height:100vh;height:100dvh;
+  width:100%;overflow:hidden;
+}
 
 /* Header */
-.header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg2);border-bottom:1px solid var(--border)}
+.hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 12px;background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
+}
 .logo{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:2px;color:var(--accent)}
 .logo span{color:var(--muted);font-weight:300}
 #clock{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px}
 
 /* BLE bar */
-.ble-bar{display:flex;align-items:center;gap:8px;padding:7px 14px;background:var(--bg3);border-bottom:1px solid var(--border)}
-.ble-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .3s}
-.ble-dot.on{background:var(--success);animation:blink 2s infinite}
-.ble-dot.err{background:var(--danger)}
+.blebar{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 12px;background:var(--bg3);
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;width:100%;overflow:hidden;
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--muted);flex-shrink:0}
+.dot.on{background:var(--success);animation:blink 2s infinite}
+.dot.err{background:var(--danger)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
-.ble-status{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.5px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.btn{font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:5px 10px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--text);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.bstat{
+  font-family:var(--mono);font-size:9px;color:var(--muted);
+  letter-spacing:.3px;flex:1;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  min-width:0;
+}
+.btn{
+  font-family:var(--mono);font-size:9px;letter-spacing:.5px;
+  padding:4px 8px;border-radius:4px;
+  border:1px solid var(--border2);background:transparent;
+  color:var(--text);cursor:pointer;
+  white-space:nowrap;flex-shrink:0;
+  transition:all .2s;
+}
 .btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
 .btn:disabled{opacity:.3;cursor:default}
-.btn.connected{border-color:var(--success);color:var(--success)}
+.btn.conn{border-color:var(--success);color:var(--success)}
 
-/* Body: columna izq + columna der */
-.body{display:grid;overflow:hidden}
+/* Body */
+.body{
+  display:grid;overflow:hidden;
+  width:100%;min-width:0;
+}
 @media(min-width:680px){.body{grid-template-columns:1fr 300px}}
 @media(max-width:679px){.body{grid-template-rows:auto 1fr}}
 
 /* Panel izquierdo */
-.left{display:flex;flex-direction:column;overflow:hidden;width:100%;min-width:0}
+.left{
+  display:flex;flex-direction:column;
+  overflow:hidden;width:100%;min-width:0;
+}
 
 /* Sección live */
-.live{padding:10px 10px 8px;border-bottom:1px solid var(--border);flex-shrink:0;min-width:0;overflow:hidden}
+.live{
+  padding:8px 10px 6px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;width:100%;
+  box-sizing:border-box;
+}
 
 /* Métricas */
-.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-bottom:8px;border-radius:4px;overflow:hidden}
-.metric{background:var(--bg2);padding:6px 8px}
-.metric-label{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px}
-.metric-value{font-family:var(--mono);font-size:15px;font-weight:600;line-height:1}
+.metrics{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:var(--border);
+  margin-bottom:6px;border-radius:4px;overflow:hidden;
+  width:100%;
+}
+.metric{background:var(--bg2);padding:5px 6px}
+.mlbl{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:1px}
+.mval{font-family:var(--mono);font-size:14px;font-weight:600;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ok{color:var(--success)}.err{color:var(--danger)}
 
 /* 3 ventanas mini */
-.windows{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-bottom:8px;min-width:0}
-.win{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:5px 4px 3px;min-width:0;overflow:hidden}
-.win.best{border-color:var(--accent);background:#0c1d34}
-.win-title{font-family:var(--mono);font-size:8px;color:var(--muted);margin-bottom:3px;display:flex;justify-content:space-between}
-.win-title b{color:var(--accent2);font-weight:600}
-.cv{position:relative;height:60px}
-.cv canvas{width:100%!important;height:100%!important}
+.wins{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:4px;margin-bottom:6px;
+  width:100%;min-width:0;
+}
+.win{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:5px;padding:4px 4px 2px;
+  min-width:0;overflow:hidden;
+}
+.win.best{border-color:var(--accent);background:#cde4f5}
+.wtitle{
+  font-family:var(--mono);font-size:7px;color:var(--muted);
+  margin-bottom:2px;display:flex;justify-content:space-between;
+  white-space:nowrap;overflow:hidden;
+}
+.wtitle b{color:var(--accent2);font-weight:600;font-size:7px}
+.cv{position:relative;height:58px;width:100%}
+.cv canvas{position:absolute;top:0;left:0;width:100%!important;height:100%!important}
 
-/* Gráfico principal mejor ventana */
-.main-chart-card{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:8px 8px 5px;margin-bottom:4px}
-.main-chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
-.main-chart-title{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
-.peak-tag{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:3px;border:1px solid var(--border2);color:var(--accent2);background:rgba(0,83,138,0.08)}
-.main-cv{position:relative;height:120px}
-.main-cv canvas{width:100%!important;height:100%!important}
+/* Gráfico principal */
+.maincard{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:5px;padding:6px 6px 4px;
+  margin-bottom:4px;width:100%;box-sizing:border-box;
+}
+.mainhdr{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:4px;gap:6px;
+}
+.maintitle{font-family:var(--mono);font-size:7px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;white-space:nowrap}
+.ptag{
+  font-family:var(--mono);font-size:8px;padding:1px 6px;
+  border-radius:3px;border:1px solid var(--border2);
+  color:var(--accent2);background:rgba(0,83,138,0.08);
+  white-space:nowrap;flex-shrink:0;
+}
+.maincv{position:relative;height:110px;width:100%}
+.maincv canvas{position:absolute;top:0;left:0;width:100%!important;height:100%!important}
 
 /* Progress */
-.dl-prog{height:2px;background:var(--border);border-radius:1px;overflow:hidden;margin-top:4px;opacity:0;transition:opacity .3s}
-.dl-prog.active{opacity:1}
-.dl-bar{height:100%;background:var(--accent);width:0;transition:width .4s}
+.prog{height:2px;background:var(--border);border-radius:1px;overflow:hidden;margin-top:4px;opacity:0;transition:opacity .3s}
+.prog.on{opacity:1}
+.bar{height:100%;background:var(--accent);width:0;transition:width .4s}
 
 /* Historial */
-.hist{flex:1;overflow-y:auto;padding:8px 14px}
-.hist-hdr{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.hist-count{color:var(--accent);font-size:9px}
-.hist-list{display:flex;flex-direction:column;gap:3px}
-.hist-item{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:7px 10px;cursor:pointer;transition:border-color .15s;display:flex;justify-content:space-between;align-items:center;gap:8px}
-.hist-item:hover{border-color:var(--border2)}
-.hist-item.sel{border-color:var(--accent);background:#0d1e35}
-.hist-ts{font-family:var(--mono);font-size:10px;color:var(--text)}
-.hist-m{font-family:var(--mono);font-size:8px;color:var(--muted);margin-top:2px}
-.hist-badge{font-family:var(--mono);font-size:8px;padding:2px 5px;border-radius:3px;border:1px solid var(--success);color:var(--success);white-space:nowrap;flex-shrink:0}
-.hist-empty{font-family:var(--mono);font-size:10px;color:var(--muted);text-align:center;padding:20px;letter-spacing:.5px}
+.hist{flex:1;overflow-y:auto;padding:6px 10px}
+.histhdr{
+  font-family:var(--mono);font-size:8px;color:var(--muted);
+  letter-spacing:1.5px;text-transform:uppercase;
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:5px;
+}
+.hcnt{color:var(--accent);font-size:8px}
+.hlist{display:flex;flex-direction:column;gap:3px}
+.hitem{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:5px;padding:6px 8px;cursor:pointer;
+  transition:border-color .15s;
+  display:flex;justify-content:space-between;align-items:center;gap:6px;
+}
+.hitem:hover{border-color:var(--border2)}
+.hitem.sel{border-color:var(--accent);background:#cde4f5}
+.hts{font-family:var(--mono);font-size:9px;color:var(--text)}
+.hm{font-family:var(--mono);font-size:7px;color:var(--muted);margin-top:1px}
+.hbadge{
+  font-family:var(--mono);font-size:7px;padding:2px 4px;
+  border-radius:3px;border:1px solid var(--success);
+  color:var(--success);white-space:nowrap;flex-shrink:0;
+}
+.hempty{font-family:var(--mono);font-size:10px;color:var(--muted);text-align:center;padding:16px;letter-spacing:.5px}
 
-/* Panel derecho detalle */
-.right{border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;background:var(--bg2)}
-@media(max-width:679px){.right{border-left:none;border-top:1px solid var(--border);height:260px;flex-shrink:0}}
-.detail-hdr{padding:10px 14px 8px;border-bottom:1px solid var(--border);flex-shrink:0}
-.detail-label{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px}
-.detail-ts{font-family:var(--mono);font-size:10px;color:var(--text)}
-.detail-body{flex:1;overflow:hidden;padding:8px 14px;display:flex;flex-direction:column;gap:6px}
-.detail-metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:3px}
-.dm{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:5px 7px}
-.dm-label{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:1px}
-.dm-value{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--accent)}
-.detail-fft{flex:1;position:relative;min-height:60px}
-.detail-gps{font-family:var(--mono);font-size:8px;color:var(--muted)}
-.placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:8px;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px}
-.placeholder::before{content:'';display:block;width:24px;height:1px;background:var(--border2)}
+/* Panel derecho */
+.right{
+  border-left:1px solid var(--border);
+  display:flex;flex-direction:column;
+  overflow:hidden;background:var(--bg2);
+}
+@media(max-width:679px){
+  .right{border-left:none;border-top:1px solid var(--border);height:240px;flex-shrink:0}
+}
+.dethdr{padding:8px 12px 6px;border-bottom:1px solid var(--border);flex-shrink:0}
+.detlbl{font-family:var(--mono);font-size:7px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:1px}
+.detts{font-family:var(--mono);font-size:9px;color:var(--text)}
+.detbody{flex:1;overflow:hidden;padding:6px 12px;display:flex;flex-direction:column;gap:5px}
+.detmet{display:grid;grid-template-columns:repeat(2,1fr);gap:3px}
+.dm{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:4px 6px}
+.dmlbl{font-family:var(--mono);font-size:7px;color:var(--muted);letter-spacing:.8px;margin-bottom:1px}
+.dmval{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--accent)}
+.detfft{flex:1;position:relative;min-height:50px}
+.detgps{font-family:var(--mono);font-size:7px;color:var(--muted)}
+.ph{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;height:100%;gap:6px;
+  font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px;
+}
+.ph::before{content:'';display:block;width:20px;height:1px;background:var(--border2)}
 
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -120,400 +217,286 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--s
 <body>
 <div class="app">
 
-<header class="header">
+<header class="hdr">
   <div class="logo">PigTracker <span>// V2</span></div>
   <div id="clock">--:--:--</div>
 </header>
 
-<div class="ble-bar">
-  <div class="ble-dot" id="bleDot"></div>
-  <div class="ble-status" id="bleStatus">DEMO — conectá el PigTracker por BLE</div>
-  <button class="btn" id="dlBtn" onclick="descargarHistorial()" disabled>↓ HIST</button>
-  <button class="btn" id="bleBtn" onclick="toggleBLE()">CONECTAR</button>
+<div class="blebar">
+  <div class="dot" id="dot"></div>
+  <div class="bstat" id="bstat">DEMO — conectá el PigTracker por BLE</div>
+  <button class="btn" id="dlbtn" onclick="dlHist()" disabled>↓ HIST</button>
+  <button class="btn" id="blebtn" onclick="toggleBLE()">CONECTAR</button>
 </div>
 
 <div class="body">
-
-  <!-- Panel izquierdo -->
   <div class="left">
     <div class="live">
-
-      <!-- Métricas -->
       <div class="metrics">
-        <div class="metric"><div class="metric-label">Frec.</div><div class="metric-value" id="mFreq">— Hz</div></div>
-        <div class="metric"><div class="metric-label">Mag</div><div class="metric-value" id="mMag">—</div></div>
-        <div class="metric"><div class="metric-label">SNR</div><div class="metric-value" id="mSnr">—</div></div>
-        <div class="metric"><div class="metric-label">Detección</div><div class="metric-value err" id="mDet">NO</div></div>
+        <div class="metric"><div class="mlbl">Frec.</div><div class="mval" id="mF">— Hz</div></div>
+        <div class="metric"><div class="mlbl">Mag</div><div class="mval" id="mM">—</div></div>
+        <div class="metric"><div class="mlbl">SNR</div><div class="mval" id="mS">—</div></div>
+        <div class="metric"><div class="mlbl">Detección</div><div class="mval err" id="mD">NO</div></div>
       </div>
-
-      <!-- 3 ventanas mini -->
-      <div class="windows">
-        <div class="win" id="wc0"><div class="win-title">V1/3 <b id="b0">— Hz</b></div><div class="cv"><canvas id="c0"></canvas></div></div>
-        <div class="win" id="wc1"><div class="win-title">V2/3 <b id="b1">— Hz</b></div><div class="cv"><canvas id="c1"></canvas></div></div>
-        <div class="win" id="wc2"><div class="win-title">V3/3 <b id="b2">— Hz</b></div><div class="cv"><canvas id="c2"></canvas></div></div>
+      <div class="wins">
+        <div class="win" id="w0"><div class="wtitle">V1/3 <b id="b0">— Hz</b></div><div class="cv"><canvas id="c0"></canvas></div></div>
+        <div class="win" id="w1"><div class="wtitle">V2/3 <b id="b1">— Hz</b></div><div class="cv"><canvas id="c1"></canvas></div></div>
+        <div class="win" id="w2"><div class="wtitle">V3/3 <b id="b2">— Hz</b></div><div class="cv"><canvas id="c2"></canvas></div></div>
       </div>
-
-      <!-- Gráfico principal mejor ventana -->
-      <div class="main-chart-card">
-        <div class="main-chart-header">
-          <div class="main-chart-title">Mejor ventana — 0 a 75 Hz &nbsp;|&nbsp; Δf = 2.34 Hz/bin</div>
-          <div class="peak-tag" id="peakTag">P1: — Hz</div>
+      <div class="maincard">
+        <div class="mainhdr">
+          <div class="maintitle">Mejor ventana — 0 a 75 Hz &nbsp;|&nbsp; Δf = 2.34 Hz/bin</div>
+          <div class="ptag" id="ptag">P1: — Hz</div>
         </div>
-        <div class="main-cv"><canvas id="cMain"></canvas></div>
+        <div class="maincv"><canvas id="cm"></canvas></div>
       </div>
-
-      <div class="dl-prog" id="dlProg"><div class="dl-bar" id="dlBar"></div></div>
+      <div class="prog" id="prog"><div class="bar" id="bar"></div></div>
     </div>
-
-    <!-- Historial -->
     <div class="hist">
-      <div class="hist-hdr"><span>Historial</span><span class="hist-count" id="hCount">0 registros</span></div>
-      <div class="hist-list" id="hList"><div class="hist-empty" id="hEmpty">Sin detecciones guardadas</div></div>
+      <div class="histhdr"><span>Historial</span><span class="hcnt" id="hcnt">0 registros</span></div>
+      <div class="hlist" id="hlist"><div class="hempty" id="hemp">Sin detecciones guardadas</div></div>
     </div>
   </div>
 
-  <!-- Panel derecho detalle -->
   <div class="right">
-    <div class="detail-hdr">
-      <div class="detail-label">Detalle de detección</div>
-      <div class="detail-ts" id="dTs">—</div>
+    <div class="dethdr">
+      <div class="detlbl">Detalle de detección</div>
+      <div class="detts" id="dts">—</div>
     </div>
-    <div class="detail-body">
-      <div class="detail-metrics" id="dMetrics" style="display:none">
-        <div class="dm"><div class="dm-label">MAGNITUD</div><div class="dm-value" id="dMag">—</div></div>
-        <div class="dm"><div class="dm-label">SNR</div><div class="dm-value" id="dSnr">—</div></div>
-        <div class="dm"><div class="dm-label">RATIO</div><div class="dm-value" id="dRatio">—</div></div>
-        <div class="dm"><div class="dm-label">FRECUENCIA</div><div class="dm-value" id="dFreq">—</div></div>
+    <div class="detbody">
+      <div class="detmet" id="dmet" style="display:none">
+        <div class="dm"><div class="dmlbl">MAGNITUD</div><div class="dmval" id="dMag">—</div></div>
+        <div class="dm"><div class="dmlbl">SNR</div><div class="dmval" id="dSnr">—</div></div>
+        <div class="dm"><div class="dmlbl">RATIO</div><div class="dmval" id="dRatio">—</div></div>
+        <div class="dm"><div class="dmlbl">FRECUENCIA</div><div class="dmval" id="dFreq">—</div></div>
       </div>
-      <div class="detail-fft">
-        <canvas id="cDetail"></canvas>
-        <div class="placeholder" id="dPlaceholder"><span>Seleccioná una detección</span></div>
+      <div class="detfft">
+        <canvas id="cd"></canvas>
+        <div class="ph" id="dph"><span>Seleccioná una detección</span></div>
       </div>
-      <div class="detail-gps" id="dGps"></div>
+      <div class="detgps" id="dgps"></div>
     </div>
   </div>
-
 </div>
 </div>
 
 <script>
 'use strict';
-const SVC_UUID='12345678-1234-1234-1234-123456789abc';
-const CHAR_FFT_UUID='abcd1234-ab12-cd34-ef56-abcdef123456';
-const CHAR_HIST_UUID='abcd1234-ab12-cd34-ef56-abcdef123457';
-const N_BINS=32,BIN_RES=150/64,TARGET=22;
-const BIN_LO=Math.max(1,Math.round((TARGET-2.5)/BIN_RES));
-const BIN_HI=Math.min(N_BINS-1,Math.round((TARGET+2.5)/BIN_RES));
-const BIN_TGT=Math.round(TARGET/BIN_RES);
-const LABELS=Array.from({length:N_BINS},(_,i)=>(i*BIN_RES).toFixed(1));
+const SVC='12345678-1234-1234-1234-123456789abc';
+const CFFT='abcd1234-ab12-cd34-ef56-abcdef123456';
+const CHIST='abcd1234-ab12-cd34-ef56-abcdef123457';
+const NB=32,BR=150/64,TG=22;
+const BL=Math.max(1,Math.round((TG-2.5)/BR));
+const BH=Math.min(NB-1,Math.round((TG+2.5)/BR));
+const BT=Math.round(TG/BR);
+const LBL=Array.from({length:NB},(_,i)=>(i*BR).toFixed(1));
 
-let bleDevice=null,charFFT=null,charHist=null;
-let connected=false,isDemo=true;
-let spectra=[new Float32Array(N_BINS),new Float32Array(N_BINS),new Float32Array(N_BINS)];
-let bestWin=0,demoPhase=0,lastDemoUpd=[0,0,0];
-let historial=[],selectedIdx=-1,dlTotal=0;
+let dev=null,cFFT=null,cHist=null,conn=false,demo=true;
+let sp=[new Float32Array(NB),new Float32Array(NB),new Float32Array(NB)];
+let bw=0,ph=0,lu=[0,0,0],hist=[],si=-1,dlt=0;
 
 // IndexedDB
-const DB='pigtracker',STORE='hist';
 let db=null;
 (async()=>{
   db=await new Promise((r,j)=>{
-    const q=indexedDB.open(DB,1);
-    q.onupgradeneeded=e=>e.target.result.createObjectStore(STORE,{keyPath:'ts'});
+    const q=indexedDB.open('pt',1);
+    q.onupgradeneeded=e=>e.target.result.createObjectStore('h',{keyPath:'ts'});
     q.onsuccess=e=>r(e.target.result);q.onerror=j;
   }).catch(()=>null);
   if(!db)return;
-  const items=await new Promise(r=>{
-    const q=db.transaction(STORE,'readonly').objectStore(STORE).getAll();
+  const it=await new Promise(r=>{
+    const q=db.transaction('h','readonly').objectStore('h').getAll();
     q.onsuccess=e=>r(e.target.result||[]);q.onerror=()=>r([]);
   });
-  if(items.length){historial=items.sort((a,b)=>a.ts>b.ts?-1:1);renderHist();}
+  if(it.length){hist=it.sort((a,b)=>a.ts>b.ts?-1:1);rHist();}
 })();
-function saveDB(items){
-  if(!db)return;
-  const tx=db.transaction(STORE,'readwrite'),st=tx.objectStore(STORE);
-  items.forEach(i=>st.put(i));
-}
+function sDB(it){if(!db)return;const tx=db.transaction('h','readwrite'),s=tx.objectStore('h');it.forEach(i=>s.put(i));}
 
-// Plugin banda objetivo
-const bandPlugin=id=>({id,beforeDraw(c){
+// Plugin banda
+const bp=id=>({id,beforeDraw(c){
   const{ctx,chartArea:{top,bottom},scales:{x}}=c;
   if(!x)return;
-  const xL=x.getPixelForValue(BIN_LO),xH=x.getPixelForValue(BIN_HI),xT=x.getPixelForValue(BIN_TGT);
+  const xl=x.getPixelForValue(BL),xh=x.getPixelForValue(BH),xt=x.getPixelForValue(BT);
   ctx.save();
-  ctx.fillStyle='rgba(0,83,138,0.10)';ctx.fillRect(xL,top,xH-xL,bottom-top);
+  ctx.fillStyle='rgba(0,83,138,0.10)';ctx.fillRect(xl,top,xh-xl,bottom-top);
   ctx.strokeStyle='rgba(0,83,138,0.45)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
-  ctx.beginPath();ctx.moveTo(xT,top);ctx.lineTo(xT,bottom);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(xt,top);ctx.lineTo(xt,bottom);ctx.stroke();
   ctx.setLineDash([]);ctx.restore();
 }});
 
-const miniOpts=()=>({responsive:true,maintainAspectRatio:false,animation:false,
+const mO=()=>({responsive:true,maintainAspectRatio:false,animation:false,
   plugins:{legend:{display:false},tooltip:{enabled:false}},
   scales:{x:{display:false},y:{display:false,min:0,max:800}}
 });
-
-const mainOpts=()=>({responsive:true,maintainAspectRatio:false,animation:false,
+const gO=()=>({responsive:true,maintainAspectRatio:false,animation:false,
   plugins:{legend:{display:false},tooltip:{
     backgroundColor:'#f0f5fc',borderColor:'#aabdd8',borderWidth:1,
     titleColor:'#42607e',bodyColor:'#00538a',
     titleFont:{family:'IBM Plex Mono',size:9},bodyFont:{family:'IBM Plex Mono',size:10},
-    callbacks:{
-      title:i=>(i[0].dataIndex*BIN_RES).toFixed(2)+' Hz',
-      label:i=>i.datasetIndex===0?' mag: '+i.raw.toFixed(1):null,
-      filter:i=>i.datasetIndex===0
-    }
+    callbacks:{title:i=>(i[0].dataIndex*BR).toFixed(2)+' Hz',label:i=>i.datasetIndex===0?' mag: '+i.raw.toFixed(1):null,filter:i=>i.datasetIndex===0}
   }},
   scales:{
-    x:{grid:{color:'#aabdd8'},ticks:{color:'#42607e',font:{family:'IBM Plex Mono',size:8},maxTicksLimit:10,maxRotation:0,callback:(v,i)=>i%4===0?Math.round(i*BIN_RES):''},border:{color:'#aabdd8'}},
+    x:{grid:{color:'#aabdd8'},ticks:{color:'#42607e',font:{family:'IBM Plex Mono',size:8},maxTicksLimit:10,maxRotation:0,callback:(v,i)=>i%4===0?Math.round(i*BR):''},border:{color:'#aabdd8'}},
     y:{min:0,max:800,grid:{color:'#aabdd8'},ticks:{color:'#42607e',font:{family:'IBM Plex Mono',size:8},maxTicksLimit:5,callback:v=>v>=1000?(v/1000).toFixed(0)+'k':v},border:{color:'#aabdd8'}}
   }
 });
 
-// Charts mini
 const COLS=['#00538a','#007ba7','#4a90b8'];
-const mCharts=COLS.map((c,w)=>new Chart(document.getElementById('c'+w),{
-  type:'line',
-  data:{labels:LABELS,datasets:[{data:new Array(N_BINS).fill(0),borderColor:c,borderWidth:1.2,pointRadius:0,fill:false,tension:0.3}]},
-  options:miniOpts(),plugins:[bandPlugin('b'+w)]
+const mc=COLS.map((c,w)=>new Chart(document.getElementById('c'+w),{
+  type:'line',data:{labels:LBL,datasets:[{data:new Array(NB).fill(0),borderColor:c,borderWidth:1.2,pointRadius:0,fill:false,tension:0.3}]},
+  options:mO(),plugins:[bp('b'+w)]
 }));
 
-// Chart principal (mejor ventana)
-const cMain=new Chart(document.getElementById('cMain'),{
+const cm=new Chart(document.getElementById('cm'),{
   type:'line',
-  data:{labels:LABELS,datasets:[
-    {data:new Array(N_BINS).fill(0),borderColor:'#007ba7',borderWidth:1.8,pointRadius:0,fill:true,backgroundColor:'rgba(0,83,138,0.07)',tension:0.3},
-    {data:new Array(N_BINS).fill(null),borderWidth:0,pointRadius:6,pointBackgroundColor:'#b03000',pointBorderColor:'#e6edf7',pointBorderWidth:1.5,fill:false,showLine:false}
-  ]},
-  options:mainOpts(),plugins:[bandPlugin('bm')]
+  data:{labels:LBL,datasets:[
+    {data:new Array(NB).fill(0),borderColor:'#007ba7',borderWidth:1.8,pointRadius:0,fill:true,backgroundColor:'rgba(0,83,138,0.07)',tension:0.3},
+    {data:new Array(NB).fill(null),borderWidth:0,pointRadius:6,pointBackgroundColor:'#b03000',pointBorderColor:'#e6edf7',pointBorderWidth:1.5,fill:false,showLine:false}
+  ]},options:gO(),plugins:[bp('bm')]
 });
 
-// Chart detalle historial
-const cDetail=new Chart(document.getElementById('cDetail'),{
+const cd=new Chart(document.getElementById('cd'),{
   type:'line',
-  data:{labels:LABELS,datasets:[
-    {data:new Array(N_BINS).fill(0),borderColor:'#00538a',borderWidth:1.8,pointRadius:0,fill:true,backgroundColor:'rgba(0,83,138,0.08)',tension:0.3},
-    {data:new Array(N_BINS).fill(null),borderWidth:0,pointRadius:5,pointBackgroundColor:'#7a4800',pointBorderColor:'#e6edf7',pointBorderWidth:1.5,fill:false,showLine:false}
-  ]},
-  options:mainOpts(),plugins:[bandPlugin('bd')]
+  data:{labels:LBL,datasets:[
+    {data:new Array(NB).fill(0),borderColor:'#00538a',borderWidth:1.8,pointRadius:0,fill:true,backgroundColor:'rgba(0,83,138,0.08)',tension:0.3},
+    {data:new Array(NB).fill(null),borderWidth:0,pointRadius:5,pointBackgroundColor:'#7a4800',pointBorderColor:'#e6edf7',pointBorderWidth:1.5,fill:false,showLine:false}
+  ]},options:gO(),plugins:[bp('bd')]
 });
 
-// Helpers
-function bandE(s){let e=0;for(let i=BIN_LO;i<=BIN_HI;i++)e+=s[i]*s[i];return e;}
-function findPk(arr,n=1){
-  const ps=[];
-  for(let i=1;i<arr.length-1;i++)if(arr[i]>arr[i-1]&&arr[i]>arr[i+1]&&arr[i]>30)ps.push({b:i,v:arr[i]});
-  return ps.sort((a,b)=>b.v-a.v).slice(0,n);
-}
-function snr(s,b){let sm=0,c=0;for(let i=1;i<N_BINS;i++)if(Math.abs(i-b)>2){sm+=s[i];c++;}const n=c?sm/c:0.001;return n?(s[b]/n).toFixed(1):'—';}
-function proc(raw,w){for(let i=0;i<N_BINS;i++)spectra[w][i]=spectra[w][i]*0.2+raw[i]*0.8;}
+function bE(s){let e=0;for(let i=BL;i<=BH;i++)e+=s[i]*s[i];return e;}
+function pk(a,n=1){const p=[];for(let i=1;i<a.length-1;i++)if(a[i]>a[i-1]&&a[i]>a[i+1]&&a[i]>30)p.push({b:i,v:a[i]});return p.sort((a,b)=>b.v-a.v).slice(0,n);}
+function snr(s,b){let sm=0,c=0;for(let i=1;i<NB;i++)if(Math.abs(i-b)>2){sm+=s[i];c++;}const n=c?sm/c:0.001;return n?(s[b]/n).toFixed(1):'—';}
+function proc(r,w){for(let i=0;i<NB;i++)sp[w][i]=sp[w][i]*0.2+r[i]*0.8;}
 
-// Update live
-function updateLive(){
-  let maxE=-1;
-  for(let w=0;w<3;w++){const e=bandE(spectra[w]);if(e>maxE){maxE=e;bestWin=w;}}
-  // Mini charts
+function upd(){
+  let mx=-1;for(let w=0;w<3;w++){const e=bE(sp[w]);if(e>mx){mx=e;bw=w;}}
   for(let w=0;w<3;w++){
-    mCharts[w].data.datasets[0].data=Array.from(spectra[w]);
-    mCharts[w].update('none');
-    const pk=findPk(spectra[w]);
-    document.getElementById('b'+w).textContent=pk.length?(pk[0].b*BIN_RES).toFixed(1)+' Hz':'— Hz';
-    document.getElementById('wc'+w).classList.toggle('best',w===bestWin);
+    mc[w].data.datasets[0].data=Array.from(sp[w]);mc[w].update('none');
+    const p=pk(sp[w]);
+    document.getElementById('b'+w).textContent=p.length?(p[0].b*BR).toFixed(1)+' Hz':'— Hz';
+    document.getElementById('w'+w).classList.toggle('best',w===bw);
   }
-  // Chart principal — mejor ventana
-  const best=spectra[bestWin];
-  const pks=findPk(best);
-  const maxVal=Math.max(...best,100);
-  cMain.options.scales.y.max=Math.ceil(maxVal*1.2);
-  cMain.data.datasets[0].data=Array.from(best);
-  // Pico principal marcado en rojo
-  const pd=new Array(N_BINS).fill(null);
-  if(pks.length)pd[pks[0].b]=pks[0].v;
-  cMain.data.datasets[1].data=pd;
-  cMain.update('none');
-  // Métricas
-  if(pks.length){
-    const p=pks[0];
-    document.getElementById('mFreq').textContent=(p.b*BIN_RES).toFixed(2)+' Hz';
-    document.getElementById('mMag').textContent=p.v.toFixed(0);
-    document.getElementById('mSnr').textContent=snr(best,p.b);
-    document.getElementById('peakTag').textContent='P1: '+(p.b*BIN_RES).toFixed(2)+' Hz';
-  }
+  const bs=sp[bw],ps=pk(bs);
+  const mx2=Math.max(...bs,100);
+  cm.options.scales.y.max=Math.ceil(mx2*1.2);
+  cm.data.datasets[0].data=Array.from(bs);
+  const pd=new Array(NB).fill(null);
+  if(ps.length){pd[ps[0].b]=ps[0].v;document.getElementById('ptag').textContent='P1: '+(ps[0].b*BR).toFixed(2)+' Hz';}
+  cm.data.datasets[1].data=pd;cm.update('none');
+  if(ps.length){document.getElementById('mF').textContent=(ps[0].b*BR).toFixed(2)+' Hz';document.getElementById('mM').textContent=ps[0].v.toFixed(0);document.getElementById('mS').textContent=snr(bs,ps[0].b);}
 }
 
-// Demo
-function demoW(w){
-  demoPhase+=0.01;
-  const out=new Float32Array(N_BINS),a=[420,680,280];
-  for(let i=1;i<N_BINS;i++){
-    let v=a[w]*Math.exp(-Math.pow((i-BIN_TGT)/1.1,2));
-    v+=150*Math.exp(-Math.pow((i-18)/2,2))+60*Math.random();
-    out[i]=Math.max(0,v);
-  }
-  return out;
-}
+function dW(w){ph+=0.01;const o=new Float32Array(NB),a=[420,680,280];for(let i=1;i<NB;i++){let v=a[w]*Math.exp(-Math.pow((i-BT)/1.1,2));v+=150*Math.exp(-Math.pow((i-18)/2,2))+60*Math.random();o[i]=Math.max(0,v);}return o;}
 
-let lastCk=0;
+let lck=0;
 function loop(ts){
   requestAnimationFrame(loop);
-  if(ts-lastCk>500){
-    lastCk=ts;
-    document.getElementById('clock').textContent=
-      new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  }
-  if(!isDemo)return;
-  for(let w=0;w<3;w++){
-    if(ts-lastDemoUpd[w]>700+w*220){lastDemoUpd[w]=ts;proc(demoW(w),w);}
-  }
-  updateLive();
+  if(ts-lck>500){lck=ts;document.getElementById('clock').textContent=new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
+  if(!demo)return;
+  for(let w=0;w<3;w++){if(ts-lu[w]>700+w*220){lu[w]=ts;proc(dW(w),w);}}
+  upd();
 }
 requestAnimationFrame(loop);
 
-// BLE
 async function toggleBLE(){
-  if(connected){disconn();return;}
+  if(conn){disc();return;}
   try{
-    setS('Buscando PigTracker...');
-    bleDevice=await navigator.bluetooth.requestDevice({filters:[{name:'FFT-Analyzer'}],optionalServices:[SVC_UUID]});
-    bleDevice.addEventListener('gattserverdisconnected',onDisc);
-    setS('Conectando...');
-    const srv=await bleDevice.gatt.connect();
-    const svc=await srv.getPrimaryService(SVC_UUID);
-    charFFT=await svc.getCharacteristic(CHAR_FFT_UUID);
-    charHist=await svc.getCharacteristic(CHAR_HIST_UUID);
-    await charFFT.startNotifications();
-    charFFT.addEventListener('characteristicvaluechanged',onFFT);
-    await charHist.startNotifications();
-    charHist.addEventListener('characteristicvaluechanged',onHist);
-    connected=true;isDemo=false;
-    document.getElementById('bleDot').className='ble-dot on';
-    document.getElementById('bleBtn').textContent='DESCONECTAR';
-    document.getElementById('bleBtn').className='btn connected';
-    document.getElementById('dlBtn').disabled=false;
-    setS('Conectado — FFT-Analyzer');
-  }catch(e){
-    setS('Error: '+e.message);
-    document.getElementById('bleDot').className='ble-dot err';
-    setTimeout(()=>document.getElementById('bleDot').className='ble-dot',3000);
-  }
+    sS('Buscando PigTracker...');
+    dev=await navigator.bluetooth.requestDevice({filters:[{name:'FFT-Analyzer'}],optionalServices:[SVC]});
+    dev.addEventListener('gattserverdisconnected',onDisc);
+    sS('Conectando...');
+    const srv=await dev.gatt.connect();
+    const svc=await srv.getPrimaryService(SVC);
+    cFFT=await svc.getCharacteristic(CFFT);
+    cHist=await svc.getCharacteristic(CHIST);
+    await cFFT.startNotifications();cFFT.addEventListener('characteristicvaluechanged',onFFT);
+    await cHist.startNotifications();cHist.addEventListener('characteristicvaluechanged',onHist);
+    conn=true;demo=false;
+    document.getElementById('dot').className='dot on';
+    document.getElementById('blebtn').textContent='DESCONECTAR';
+    document.getElementById('blebtn').className='btn conn';
+    document.getElementById('dlbtn').disabled=false;
+    sS('Conectado — FFT-Analyzer');
+  }catch(e){sS('Error: '+e.message);document.getElementById('dot').className='dot err';setTimeout(()=>document.getElementById('dot').className='dot',3000);}
 }
 
 function onFFT(e){
-  const dv=e.target.value,type=dv.getUint8(0);
-  if(type===0xFF){
+  const dv=e.target.value,t=dv.getUint8(0);
+  if(t===0xFF){
     const ok=dv.getUint8(1)===1;
     const mag=(dv.getUint8(3)<<8)|dv.getUint8(4);
-    const freq=((dv.getUint8(5)<<8)|dv.getUint8(6))/100;
+    const fr=((dv.getUint8(5)<<8)|dv.getUint8(6))/100;
     const sr=dv.getUint8(8)/10;
-    document.getElementById('mMag').textContent=mag;
-    document.getElementById('mSnr').textContent=sr.toFixed(1);
-    document.getElementById('mFreq').textContent=freq.toFixed(2)+' Hz';
-    const el=document.getElementById('mDet');
-    el.textContent=ok?'SÍ':'NO';el.className='metric-value '+(ok?'ok':'err');
-    return;
+    document.getElementById('mM').textContent=mag;document.getElementById('mS').textContent=sr.toFixed(1);document.getElementById('mF').textContent=fr.toFixed(2)+' Hz';
+    const el=document.getElementById('mD');el.textContent=ok?'SÍ':'NO';el.className='mval '+(ok?'ok':'err');return;
   }
-  const w=type%3,raw=new Float32Array(N_BINS);
-  for(let i=0;i<N_BINS;i++)raw[i]=(dv.getUint8(1+i*2)<<8)|dv.getUint8(2+i*2);
-  proc(raw,w);updateLive();
+  const w=t%3,r=new Float32Array(NB);
+  for(let i=0;i<NB;i++)r[i]=(dv.getUint8(1+i*2)<<8)|dv.getUint8(2+i*2);
+  proc(r,w);upd();
 }
 
-async function descargarHistorial(){
-  if(!charHist||!connected)return;
-  dlTotal=0;
-  document.getElementById('dlProg').classList.add('active');
-  document.getElementById('dlBar').style.width='0%';
-  document.getElementById('dlBtn').disabled=true;
-  setS('Solicitando historial...');
-  await charHist.writeValue(new Uint8Array([0xA0]));
+async function dlHist(){
+  if(!cHist||!conn)return;
+  dlt=0;document.getElementById('prog').classList.add('on');document.getElementById('bar').style.width='0%';
+  document.getElementById('dlbtn').disabled=true;sS('Solicitando historial...');
+  await cHist.writeValue(new Uint8Array([0xA0]));
 }
 
 function onHist(e){
   const dv=e.target.value,cmd=dv.getUint8(0);
   if(cmd===0xA1){
-    dlTotal=(dv.getUint8(1)<<8)|dv.getUint8(2);
+    dlt=(dv.getUint8(1)<<8)|dv.getUint8(2);
     const idx=(dv.getUint8(3)<<8)|dv.getUint8(4);
-    const json=new TextDecoder().decode(new Uint8Array(dv.buffer,5));
-    try{
-      const rec=JSON.parse(json.trim());
-      const ex=historial.findIndex(h=>h.ts===rec.ts);
-      if(ex===-1)historial.push(rec);else historial[ex]=rec;
-    }catch(err){console.warn('JSON inválido',json);}
-    const pct=dlTotal?Math.round((idx+1)/dlTotal*100):0;
-    document.getElementById('dlBar').style.width=pct+'%';
-    setS('Descargando: '+(idx+1)+'/'+dlTotal);
-    charHist.writeValue(new Uint8Array([0xA2,dv.getUint8(3),dv.getUint8(4)]));
-    return;
+    const js=new TextDecoder().decode(new Uint8Array(dv.buffer,5));
+    try{const r=JSON.parse(js.trim());const ex=hist.findIndex(h=>h.ts===r.ts);if(ex===-1)hist.push(r);else hist[ex]=r;}catch(err){}
+    const pct=dlt?Math.round((idx+1)/dlt*100):0;
+    document.getElementById('bar').style.width=pct+'%';sS('Descargando: '+(idx+1)+'/'+dlt);
+    cHist.writeValue(new Uint8Array([0xA2,dv.getUint8(3),dv.getUint8(4)]));return;
   }
   if(cmd===0xA3){
-    const total=(dv.getUint8(1)<<8)|dv.getUint8(2);
-    historial.sort((a,b)=>a.ts>b.ts?-1:1);
-    saveDB(historial);renderHist();
-    document.getElementById('dlProg').classList.remove('active');
-    document.getElementById('dlBtn').disabled=false;
-    setS('Historial listo — '+total+' detecciones');
+    const tot=(dv.getUint8(1)<<8)|dv.getUint8(2);
+    hist.sort((a,b)=>a.ts>b.ts?-1:1);sDB(hist);rHist();
+    document.getElementById('prog').classList.remove('on');document.getElementById('dlbtn').disabled=false;
+    sS('Historial listo — '+tot+' detecciones');
   }
 }
 
-function onDisc(){
-  connected=false;isDemo=true;charFFT=null;charHist=null;
-  document.getElementById('bleDot').className='ble-dot';
-  document.getElementById('bleBtn').textContent='RECONECTAR';
-  document.getElementById('bleBtn').className='btn';
-  document.getElementById('dlBtn').disabled=true;
-  setS('Desconectado — modo demo');
-}
-function disconn(){if(bleDevice?.gatt?.connected)bleDevice.gatt.disconnect();onDisc();}
-function setS(m){document.getElementById('bleStatus').textContent=m;}
+function onDisc(){conn=false;demo=true;cFFT=null;cHist=null;document.getElementById('dot').className='dot';document.getElementById('blebtn').textContent='RECONECTAR';document.getElementById('blebtn').className='btn';document.getElementById('dlbtn').disabled=true;sS('Desconectado — modo demo');}
+function disc(){if(dev?.gatt?.connected)dev.gatt.disconnect();onDisc();}
+function sS(m){document.getElementById('bstat').textContent=m;}
 
-// Historial UI
-function formatTS(iso){
-  try{
-    const d=new Date(iso);
-    const ar=new Date(d.getTime()-3*3600*1000);
-    return ar.toISOString().replace('T',' ').substring(5,16)+' AR';
-  }catch{return iso;}
-}
-function renderHist(){
-  const list=document.getElementById('hList'),empty=document.getElementById('hEmpty');
-  document.getElementById('hCount').textContent=historial.length+' registro'+(historial.length!==1?'s':'');
-  if(!historial.length){empty.style.display='block';return;}
-  empty.style.display='none';list.innerHTML='';
-  historial.forEach((r,i)=>{
-    const d=document.createElement('div');
-    d.className='hist-item'+(i===selectedIdx?' sel':'');
-    d.onclick=()=>selectDet(i);
-    d.innerHTML=`<div>
-      <div class="hist-ts">${formatTS(r.ts)}</div>
-      <div class="hist-m">Mag: ${r.mag?.toFixed(0)||'—'}  SNR: ${r.snr?.toFixed(1)||'—'}  ${r.ratio?(r.ratio*100).toFixed(0)+'%':'—'}</div>
-    </div><div class="hist-badge">22 Hz</div>`;
+function fTS(iso){try{const d=new Date(iso);const ar=new Date(d.getTime()-3*3600*1000);return ar.toISOString().replace('T',' ').substring(5,16)+' AR';}catch{return iso;}}
+
+function rHist(){
+  const list=document.getElementById('hlist'),emp=document.getElementById('hemp');
+  document.getElementById('hcnt').textContent=hist.length+' registro'+(hist.length!==1?'s':'');
+  if(!hist.length){emp.style.display='block';return;}
+  emp.style.display='none';list.innerHTML='';
+  hist.forEach((r,i)=>{
+    const d=document.createElement('div');d.className='hitem'+(i===si?' sel':'');d.onclick=()=>selDet(i);
+    d.innerHTML=`<div><div class="hts">${fTS(r.ts)}</div><div class="hm">Mag: ${r.mag?.toFixed(0)||'—'}  SNR: ${r.snr?.toFixed(1)||'—'}  ${r.ratio?(r.ratio*100).toFixed(0)+'%':'—'}</div></div><div class="hbadge">22 Hz</div>`;
     list.appendChild(d);
   });
 }
-function selectDet(i){
-  selectedIdx=i;renderHist();
-  const r=historial[i];if(!r)return;
-  document.getElementById('dTs').textContent=formatTS(r.ts);
-  document.getElementById('dMetrics').style.display='grid';
+
+function selDet(i){
+  si=i;rHist();const r=hist[i];if(!r)return;
+  document.getElementById('dts').textContent=fTS(r.ts);
+  document.getElementById('dmet').style.display='grid';
   document.getElementById('dMag').textContent=r.mag?.toFixed(0)||'—';
   document.getElementById('dSnr').textContent=r.snr?.toFixed(2)||'—';
   document.getElementById('dRatio').textContent=r.ratio?(r.ratio*100).toFixed(1)+'%':'—';
   document.getElementById('dFreq').textContent=r.freq?.toFixed(2)+' Hz'||'—';
-  document.getElementById('dGps').textContent=r.lat&&r.lat!==0?`GPS: ${r.lat.toFixed(5)}, ${r.lon.toFixed(5)}`:'GPS: sin datos';
-  document.getElementById('dPlaceholder').style.display='none';
-  const fft=r.fft||[];
-  const mx=Math.max(...fft,100);
-  cDetail.options.scales.y.max=Math.ceil(mx*1.2);
-  cDetail.data.datasets[0].data=fft;
-  const pd=new Array(N_BINS).fill(null);
-  let pb=BIN_LO,pv=0;
-  for(let j=BIN_LO;j<=BIN_HI;j++){if(fft[j]>pv){pv=fft[j];pb=j;}}
-  if(pv>0)pd[pb]=pv;
-  cDetail.data.datasets[1].data=pd;
-  cDetail.update('none');
+  document.getElementById('dgps').textContent=r.lat&&r.lat!==0?`GPS: ${r.lat.toFixed(5)}, ${r.lon.toFixed(5)}`:'GPS: sin datos';
+  document.getElementById('dph').style.display='none';
+  const fft=r.fft||[];const mx=Math.max(...fft,100);
+  cd.options.scales.y.max=Math.ceil(mx*1.2);cd.data.datasets[0].data=fft;
+  const pd=new Array(NB).fill(null);let pb=BL,pv=0;
+  for(let j=BL;j<=BH;j++){if(fft[j]>pv){pv=fft[j];pb=j;}}
+  if(pv>0)pd[pb]=pv;cd.data.datasets[1].data=pd;cd.update('none');
 }
 
-if('serviceWorker'in navigator){
-  navigator.serviceWorker.register('/PMK_Tracker_V2/sw.js').catch(()=>{});
-}
+if('serviceWorker'in navigator){navigator.serviceWorker.register('/PMK_Tracker_V2/sw.js').catch(()=>{});}
 </script>
 </body>
 </html>
