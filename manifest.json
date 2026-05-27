@@ -4,8 +4,8 @@
   "description": "Detector de PIG por campo electromagnético 22Hz",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#070e1c",
-  "theme_color": "#070e1c",
+  "background_color": "#e6edf7",
+  "theme_color": "#e6edf7",
   "orientation": "portrait-primary",
   "lang": "es",
   "icons": [
