@@ -184,8 +184,8 @@ button, [role=button], .hitem, .modal-btn {
     <div class="modal-title">BORRAR HISTORIAL</div>
     <div class="modal-msg">¿Borrar el historial guardado en este dispositivo?</div>
     <div class="modal-btns">
-      <button class="modal-btn" id="btnCancelar">Cancelar</button>
-      <button class="modal-btn confirm" id="btnBorrar">Borrar</button>
+      <button class="modal-btn" onclick="hideBorrar()">Cancelar</button>
+      <button class="modal-btn confirm" onclick="confirmarBorrar()">Borrar</button>
     </div>
   </div>
 </div>
@@ -473,11 +473,8 @@ function rHist(){
     const idx=hist.length-1-i;
     const d=document.createElement("div");
     d.className="hitem"+(idx===si?" sel":"");
+    d.setAttribute("onclick","selDet("+idx+")");
     d.innerHTML=`<div><div class="hts">${fTS(r.ts)}</div><div class="hm">Mag: ${r.mag!=null?Number(r.mag).toFixed(0):"—"}  SNR: ${r.snr!=null?Number(r.snr).toFixed(1):"—"}  ${r.ratio!=null?(Number(r.ratio)*100).toFixed(0)+"%":"—"}</div></div><div class="hbadge">22 Hz</div>`;
-    d.style.cssText+="cursor:pointer;-webkit-tap-highlight-color:rgba(0,83,138,0.2)";
-    d.setAttribute("role","button");
-    d.setAttribute("tabindex","0");
-    d.addEventListener("pointerdown",e=>{e.preventDefault();selDet(idx);});
     list.appendChild(d);
   });
 }
@@ -508,13 +505,7 @@ function selDet(i){
   cd.update('none');
 }
 
-function initBotones(){
-  // Botones modal con pointerdown
-  var bc=document.getElementById('btnCancelar');
-  var bb=document.getElementById('btnBorrar');
-  if(bc)bc.addEventListener('pointerdown',function(e){e.preventDefault();hideBorrar();});
-  if(bb)bb.addEventListener('pointerdown',function(e){e.preventDefault();confirmarBorrar();});
-}
+function initBotones(){}
 function testHist(){
   hist=[];
   const rec={_id:0,ts:'1970-01-01T00:00:00Z',lat:0,lon:0,mag:884.3,snr:17.52,ratio:0.804,freq:21.09,fft:[0,0,0,9.3,9.7,4.3,81.7,44.5,154.3,220.4,237.5,79.9,29.3,35.5,9.3,30.2,16.9,5.5,3.2,3.3,94.4,288.4,228.9,26.3,9.2,3.7,3.3,2.6,2.5,1.6,0.8,0.3]};
