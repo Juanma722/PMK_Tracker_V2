@@ -463,18 +463,19 @@ function rHist(){
   const sorted=[...hist].reverse();
   sorted.forEach((r,i)=>{
     const idx=hist.length-1-i;
-    const d=document.createElement('div');
-    d.className='hitem'+(idx===si?' sel':'');
-    d.innerHTML=`
-      <div>
-        <div class="hts">${fTS(r.ts)}</div>
-        <div class="hm">Mag: ${r.mag!=null?Number(r.mag).toFixed(0):'—'}  SNR: ${r.snr!=null?Number(r.snr).toFixed(1):'—'}  ${r.ratio!=null?(Number(r.ratio)*100).toFixed(0)+'%':'—'}</div>
-      </div>
-      <div class="hbadge">22 Hz</div>`;
-    // Touch y click
-    const handler=()=>selDet(idx);
-    d.addEventListener('touchend',e=>{e.preventDefault();handler();},{passive:false});
-    d.addEventListener('click',handler);
+    const d=document.createElement("div");
+    d.className="hitem"+(idx===si?" sel":"");
+    d.innerHTML=`<div><div class="hts">${fTS(r.ts)}</div><div class="hm">Mag: ${r.mag!=null?Number(r.mag).toFixed(0):"—"}  SNR: ${r.snr!=null?Number(r.snr).toFixed(1):"—"}  ${r.ratio!=null?(Number(r.ratio)*100).toFixed(0)+"%":"—"}</div></div><div class="hbadge">22 Hz</div>`;
+    d.style.cssText+="cursor:pointer;-webkit-tap-highlight-color:rgba(0,83,138,0.2)";
+    d.setAttribute("role","button");
+    d.setAttribute("tabindex","0");
+    let tStart=0;
+    d.addEventListener("touchstart",e=>{tStart=Date.now();},{passive:true});
+    d.addEventListener("touchend",e=>{
+      if(Date.now()-tStart<300){e.preventDefault();selDet(idx);}
+    },{passive:false});
+    d.addEventListener("click",e=>selDet(idx));
+    d.addEventListener("keydown",e=>{if(e.key==="Enter")selDet(idx);});
     list.appendChild(d);
   });
 }
