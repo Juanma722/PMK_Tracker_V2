@@ -447,8 +447,8 @@ function onHist(e){
   if(cmd===0xA1){
     dlt=(dv.getUint8(1)<<8)|dv.getUint8(2);
     const idx=(dv.getUint8(3)<<8)|dv.getUint8(4);
-    const js=new TextDecoder().decode(new Uint8Array(dv.buffer,5));
-    try{const r=JSON.parse(js.trim());if(!r.ts)r.ts="1970-01-01T00:00:00Z";if(!r.fft)r.fft=new Array(32).fill(0);const ex=hist.findIndex(h=>h.ts===r.ts);if(ex===-1)hist.push(r);else hist[ex]=r;console.log("rec",idx,"ts=",r.ts);}catch(err){console.warn("JSON err idx="+idx,js.substring(0,60));}
+    // json decodificado dentro del try
+    try{let s=new TextDecoder().decode(new Uint8Array(dv.buffer,5)).replace(/[\x00-\x1F\x7F]+/g," ").trim();const r=JSON.parse(s);if(!r.ts)r.ts="1970-01-01T00:00:00Z";if(!r.fft)r.fft=new Array(32).fill(0);const ex=hist.findIndex(h=>h.ts===r.ts&&h.mag===r.mag);if(ex===-1)hist.push(r);else hist[ex]=r;}catch(err){console.warn("parse err idx="+idx);}
     const pct=dlt?Math.round((idx+1)/dlt*100):0;
     document.getElementById('bar').style.width=pct+'%';sS('Descargando: '+(idx+1)+'/'+dlt);
     cHist.writeValue(new Uint8Array([0xA2,dv.getUint8(3),dv.getUint8(4)]));return;
