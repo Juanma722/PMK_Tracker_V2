@@ -1,5 +1,6 @@
+
 // sw.js — Service Worker PigTracker V2
-const CACHE = 'pigtracker-v2-27';
+const CACHE = 'pigtracker-v2-29';
 const BASE  = '/PMK_Tracker_V2';
 const ASSETS = [
   BASE + '/',
@@ -7,13 +8,13 @@ const ASSETS = [
   'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js',
   'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap'
 ];
-
+ 
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())
   );
 });
-
+ 
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
@@ -21,7 +22,7 @@ self.addEventListener('activate', e => {
     ).then(() => self.clients.claim())
   );
 });
-
+ 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
