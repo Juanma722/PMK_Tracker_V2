@@ -226,6 +226,7 @@ html,body{
   <div class="dot" id="dot"></div>
   <div class="bstat" id="bstat">DEMO — conectá el PigTracker por BLE</div>
   <button class="btn" id="dlbtn" onclick="dlHist()" disabled>↓ HIST</button>
+  <button class="btn" id="clrbtn" onclick="borrarHistorial()">✕ BORRAR</button>
   <button class="btn" id="blebtn" onclick="toggleBLE()">CONECTAR</button>
 </div>
 
@@ -496,7 +497,15 @@ function selDet(i){
   if(pv>0)pd[pb]=pv;cd.data.datasets[1].data=pd;cd.update('none');
 }
 
-if('serviceWorker'in navigator){navigator.serviceWorker.register('/PMK_Tracker_V2/sw.js').catch(()=>{});}
+function borrarHistorial(){
+  if(!confirm("¿Borrar el historial guardado en este celular?"))return;
+  hist=[];si=-1;
+  if(db){const tx=db.transaction("h","readwrite");tx.objectStore("h").clear();}
+  rHist();
+  sS("Historial local borrado");
+}
+
+if("serviceWorker"in navigator){navigator.serviceWorker.register('/PMK_Tracker_V2/sw.js').catch(()=>{});}
 </script>
 </body>
 </html>
