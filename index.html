@@ -448,7 +448,7 @@ function onHist(e){
     dlt=(dv.getUint8(1)<<8)|dv.getUint8(2);
     const idx=(dv.getUint8(3)<<8)|dv.getUint8(4);
     const js=new TextDecoder().decode(new Uint8Array(dv.buffer,5));
-    try{const r=JSON.parse(js.trim());const ex=hist.findIndex(h=>h.ts===r.ts);if(ex===-1)hist.push(r);else hist[ex]=r;}catch(err){}
+    try{const r=JSON.parse(js.trim());if(!r.ts)r.ts="1970-01-01T00:00:00Z";if(!r.fft)r.fft=new Array(32).fill(0);const ex=hist.findIndex(h=>h.ts===r.ts);if(ex===-1)hist.push(r);else hist[ex]=r;console.log("rec",idx,"ts=",r.ts);}catch(err){console.warn("JSON err idx="+idx,js.substring(0,60));}
     const pct=dlt?Math.round((idx+1)/dlt*100):0;
     document.getElementById('bar').style.width=pct+'%';sS('Descargando: '+(idx+1)+'/'+dlt);
     cHist.writeValue(new Uint8Array([0xA2,dv.getUint8(3),dv.getUint8(4)]));return;
@@ -457,7 +457,7 @@ function onHist(e){
     const tot=(dv.getUint8(1)<<8)|dv.getUint8(2);
     hist.sort((a,b)=>a.ts>b.ts?-1:1);sDB(hist);rHist();
     document.getElementById('prog').classList.remove('on');document.getElementById('dlbtn').disabled=false;
-    sS('Historial listo — '+tot+' detecciones');
+    hist.sort((a,b)=>a.ts>b.ts?-1:1);sDB(hist);rHist();console.log("Historial total:",hist.length,"registros");
   }
 }
 
@@ -465,7 +465,7 @@ function onDisc(){conn=false;demo=true;cFFT=null;cHist=null;document.getElementB
 function disc(){if(dev?.gatt?.connected)dev.gatt.disconnect();onDisc();}
 function sS(m){document.getElementById('bstat').textContent=m;}
 
-function fTS(iso){try{const d=new Date(iso);const ar=new Date(d.getTime()-3*3600*1000);return ar.toISOString().replace('T',' ').substring(5,16)+' AR';}catch{return iso;}}
+function fTS(iso){try{const d=new Date(iso);if(isNaN(d.getTime())||d.getFullYear()<2020)return "Sin hora GPS";const ar=new Date(d.getTime()-3*3600*1000);return ar.toISOString().replace("T"," ").substring(5,16)+" AR";}catch{return String(iso);}}
 
 function rHist(){
   const list=document.getElementById('hlist'),emp=document.getElementById('hemp');
