@@ -98,6 +98,13 @@ html,body{height:100%;width:100%;max-width:100vw;background:var(--bg);color:var(
 .modal-btns{display:flex;gap:8px;justify-content:center}
 .modal-btn{font-family:var(--mono);font-size:10px;padding:6px 16px;border-radius:4px;border:1px solid var(--border2);background:transparent;color:var(--text);cursor:pointer;touch-action:manipulation}
 .modal-btn.confirm{border-color:var(--danger);color:var(--danger)}
+
+/* Touch fix global */
+button, [role=button], .hitem, .modal-btn {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: rgba(0,83,138,0.15);
+  cursor: pointer;
+}
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
@@ -177,8 +184,8 @@ html,body{height:100%;width:100%;max-width:100vw;background:var(--bg);color:var(
     <div class="modal-title">BORRAR HISTORIAL</div>
     <div class="modal-msg">¿Borrar el historial guardado en este dispositivo?</div>
     <div class="modal-btns">
-      <button class="modal-btn" onclick="hideBorrar()">Cancelar</button>
-      <button class="modal-btn confirm" onclick="confirmarBorrar()">Borrar</button>
+      <button class="modal-btn" id="btnCancelar">Cancelar</button>
+      <button class="modal-btn confirm" id="btnBorrar">Borrar</button>
     </div>
   </div>
 </div>
@@ -318,6 +325,7 @@ function dW(w){ph+=0.01;const o=new Float32Array(NB),a=[420,680,280];for(let i=1
 let lck=0;
 function loop(ts){
   requestAnimationFrame(loop);
+initBotones();
   if(ts-lck>500){lck=ts;document.getElementById('clock').textContent=new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
   if(!demo)return;
   for(let w=0;w<3;w++){if(ts-lu[w]>700+w*220){lu[w]=ts;proc(dW(w),w);}}
@@ -469,13 +477,7 @@ function rHist(){
     d.style.cssText+="cursor:pointer;-webkit-tap-highlight-color:rgba(0,83,138,0.2)";
     d.setAttribute("role","button");
     d.setAttribute("tabindex","0");
-    let tStart=0;
-    d.addEventListener("touchstart",e=>{tStart=Date.now();},{passive:true});
-    d.addEventListener("touchend",e=>{
-      if(Date.now()-tStart<300){e.preventDefault();selDet(idx);}
-    },{passive:false});
-    d.addEventListener("click",e=>selDet(idx));
-    d.addEventListener("keydown",e=>{if(e.key==="Enter")selDet(idx);});
+    d.addEventListener("pointerdown",e=>{e.preventDefault();selDet(idx);});
     list.appendChild(d);
   });
 }
@@ -506,6 +508,13 @@ function selDet(i){
   cd.update('none');
 }
 
+function initBotones(){
+  // Botones modal con pointerdown
+  var bc=document.getElementById('btnCancelar');
+  var bb=document.getElementById('btnBorrar');
+  if(bc)bc.addEventListener('pointerdown',function(e){e.preventDefault();hideBorrar();});
+  if(bb)bb.addEventListener('pointerdown',function(e){e.preventDefault();confirmarBorrar();});
+}
 function testHist(){
   hist=[];
   const rec={_id:0,ts:'1970-01-01T00:00:00Z',lat:0,lon:0,mag:884.3,snr:17.52,ratio:0.804,freq:21.09,fft:[0,0,0,9.3,9.7,4.3,81.7,44.5,154.3,220.4,237.5,79.9,29.3,35.5,9.3,30.2,16.9,5.5,3.2,3.3,94.4,288.4,228.9,26.3,9.2,3.7,3.3,2.6,2.5,1.6,0.8,0.3]};
