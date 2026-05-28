@@ -373,11 +373,15 @@ function onFFT(e){
 // ── Protocolo historial ──
 async function dlHist(){
   if(!cHist||!conn)return;
-  dlt=0;dlIdx=0;
-  document.getElementById('prog').classList.add('on');
-  document.getElementById('bar').style.width='0%';
-  document.getElementById('dlbtn').disabled=true;
-  sS('Solicitando historial...');
+  // Limpiar historial local antes de nueva descarga
+  hist=[];si=-1;dlIdx=0;
+  clearDB();
+  rHist();
+  dlt=0;
+  document.getElementById("prog").classList.add("on");
+  document.getElementById("bar").style.width="0%";
+  document.getElementById("dlbtn").disabled=true;
+  sS("Solicitando historial...");
   await cHist.writeValue(new Uint8Array([0xA0]));
 }
 
