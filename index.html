@@ -391,18 +391,24 @@ function onHist(e){
     dlt=(dv.getUint8(1)<<8)|dv.getUint8(2);
     const idx=(dv.getUint8(3)<<8)|dv.getUint8(4);
     // Decodificar y limpiar JSON
+    // Decodificar — mostrar primeros bytes para debug
     const raw=new Uint8Array(dv.buffer,5);
-    const str=new TextDecoder('utf-8').decode(raw).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g,'').trim();
+    // Log primeros bytes
+    let hexStr="";
+    for(let b=0;b<Math.min(10,raw.length);b++)hexStr+=raw[b].toString(16).padStart(2,"0")+" ";
+    console.log("idx="+idx+" bytes="+raw.length+" hex="+hexStr);
+    const str=new TextDecoder("utf-8").decode(raw).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g,"").trim();
+    console.log("idx="+idx+" str[0..60]="+str.substring(0,60));
     try{
       const r=JSON.parse(str);
-      // Usar índice secuencial como ID único (evita colisión por ts=1970)
       r._id=dlIdx++;
-      if(!r.ts)r.ts='1970-01-01T00:00:00Z';
+      if(!r.ts)r.ts="1970-01-01T00:00:00Z";
       if(!r.fft||!Array.isArray(r.fft))r.fft=new Array(NB).fill(0);
       hist.push(r);
       saveDB(r);
     }catch(err){
-      console.warn('JSON err idx='+idx+':',str.substring(0,80));
+      sS("Parse err idx="+idx+": "+err.message);
+      console.error("Parse err idx="+idx,err,str.substring(0,120));
     }
     const pct=dlt?Math.round((idx+1)/dlt*100):0;
     document.getElementById('bar').style.width=pct+'%';
