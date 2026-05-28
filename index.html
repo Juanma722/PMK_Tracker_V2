@@ -392,7 +392,7 @@ function onHist(e){
     const idx=(dv.getUint8(3)<<8)|dv.getUint8(4);
     // Decodificar y limpiar JSON
     // Decodificar — mostrar primeros bytes para debug
-    const raw=new Uint8Array(dv.buffer,5);
+    const raw=new Uint8Array(dv.buffer,dv.byteOffset+5,dv.byteLength-5);
     // Log primeros bytes
     let hexStr="";
     for(let b=0;b<Math.min(10,raw.length);b++)hexStr+=raw[b].toString(16).padStart(2,"0")+" ";
