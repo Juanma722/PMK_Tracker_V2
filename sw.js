@@ -1,5 +1,5 @@
 // sw.js — Service Worker PigTracker V2
-const CACHE = 'pigtracker-v2-25';
+const CACHE = 'pigtracker-v2-27';
 const BASE  = '/PMK_Tracker_V2';
 const ASSETS = [
   BASE + '/',
