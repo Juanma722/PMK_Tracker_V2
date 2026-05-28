@@ -473,7 +473,7 @@ function rHist(){
   if(!hist.length){emp.style.display='block';return;}
   emp.style.display='none';list.innerHTML='';
   hist.forEach((r,i)=>{
-    const d=document.createElement('div');d.className='hitem'+(i===si?' sel':'');d.onclick=()=>selDet(i);
+    const d=document.createElement("div");d.className="hitem"+(i===si?" sel":"");d.style.cursor="pointer";d.addEventListener("click",()=>selDet(i));d.addEventListener("touchend",(e)=>{e.preventDefault();selDet(i);});
     d.innerHTML=`<div><div class="hts">${fTS(r.ts)}</div><div class="hm">Mag: ${r.mag?.toFixed(0)||'—'}  SNR: ${r.snr?.toFixed(1)||'—'}  ${r.ratio?(r.ratio*100).toFixed(0)+'%':'—'}</div></div><div class="hbadge">22 Hz</div>`;
     list.appendChild(d);
   });
