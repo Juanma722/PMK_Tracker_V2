@@ -484,12 +484,10 @@ function selDet(i){
   appLog("selDet("+i+") hist.length="+hist.length);
   si=i;
   rHist();
-  // Buscar por posición — hist puede tener gaps en índices
-  const keys=Object.keys(hist);
-  appLog("keys="+JSON.stringify(keys.slice(0,3)));
-  const r=hist[i]||hist[keys[i]]||Object.values(hist)[i];
-  if(!r){appLog("ERROR: no encontrado en pos "+i+" keys="+keys.length);return;}
-  appLog("r existe mag="+r.mag);
+  // hist es un array simple — acceso directo por índice
+  const r=hist[i];
+  appLog("r="+(r?("mag="+r.mag):"UNDEFINED"));
+  if(!r){appLog("ERROR: hist["+i+"] undefined");return;}
   try{
     appLog("A");
     document.getElementById('dts').textContent=String(r.ts||"sin ts");
