@@ -123,6 +123,7 @@ button, [role=button], .hitem, .modal-btn {
   <div class="bstat" id="bstat">DEMO — conectá el PigTracker por BLE</div>
   <button class="btn" id="dlbtn" onclick="dlHist()" disabled>↓ HIST</button>
   <button class="btn" onclick="testHist()">TEST</button>
+  <button class="btn" onclick="document.getElementById('logpanel').style.display='block'">LOG</button>
   <button class="btn danger" onclick="showBorrar()">✕</button>
   <button class="btn" id="blebtn" onclick="toggleBLE()">CONECTAR</button>
 </div>
@@ -480,6 +481,7 @@ function rHist(){
 }
 
 function selDet(i){
+  appLog("selDet("+i+") hist.length="+hist.length);
   si=i;
   rHist();
   const r=hist[i];
@@ -505,11 +507,22 @@ function selDet(i){
   cd.update('none');
 }
 
+function appLog(msg){
+  var lc=document.getElementById("logcontent");
+  if(!lc)return;
+  var d=document.createElement("div");
+  d.textContent=new Date().toLocaleTimeString()+": "+msg;
+  lc.appendChild(d);
+  lc.scrollTop=lc.scrollHeight;
+  document.getElementById("logpanel").style.display="block";
+}
 function initBotones(){}
 function testHist(){
+  appLog("testHist iniciado");
   hist=[];
   const rec={_id:0,ts:'1970-01-01T00:00:00Z',lat:0,lon:0,mag:884.3,snr:17.52,ratio:0.804,freq:21.09,fft:[0,0,0,9.3,9.7,4.3,81.7,44.5,154.3,220.4,237.5,79.9,29.3,35.5,9.3,30.2,16.9,5.5,3.2,3.3,94.4,288.4,228.9,26.3,9.2,3.7,3.3,2.6,2.5,1.6,0.8,0.3]};
   hist.push(rec);
+  appLog("hist.length="+hist.length+" rec._id="+rec._id);
   rHist();
   sS('TEST: 1 registro cargado — tocá para ver el FFT');
 }
@@ -518,5 +531,13 @@ if('serviceWorker'in navigator){
   navigator.serviceWorker.register('/PMK_Tracker_V2/sw.js').catch(()=>{});
 }
 </script>
+
+<div id="logpanel" style="position:fixed;bottom:0;left:0;right:0;height:120px;background:#0a1628;color:#0ea5e9;font-family:monospace;font-size:10px;padding:6px;overflow-y:auto;z-index:200;display:none;border-top:2px solid #0ea5e9">
+  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+    <span style="color:#fff;font-weight:bold">LOG</span>
+    <button onclick="document.getElementById('logpanel').style.display='none'" style="background:transparent;border:none;color:#ef4444;font-size:12px;cursor:pointer">✕</button>
+  </div>
+  <div id="logcontent"></div>
+</div>
 </body>
 </html>
