@@ -485,10 +485,12 @@ function selDet(i){
   si=i;
   rHist();
   const r=hist[i];
-  if(!r){appLog("ERROR: hist["+i+"] es null");return;}
-  appLog("r.mag="+r.mag+" r.ts="+r.ts);
+  if(!r){appLog("ERROR: hist["+i+"] es null/undef");return;}
+  appLog("r existe mag="+r.mag);
   try{
-    document.getElementById('dts').textContent=fTS(r.ts);
+    appLog("A");
+    document.getElementById('dts').textContent=String(r.ts||"sin ts");
+    appLog("B");
     document.getElementById('dmet').style.display='grid';
     document.getElementById('dMag').textContent=r.mag!=null?Number(r.mag).toFixed(0):'—';
     document.getElementById('dSnr').textContent=r.snr!=null?Number(r.snr).toFixed(2):'—';
