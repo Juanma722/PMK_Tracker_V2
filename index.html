@@ -484,8 +484,11 @@ function selDet(i){
   appLog("selDet("+i+") hist.length="+hist.length);
   si=i;
   rHist();
-  const r=hist[i];
-  if(!r){appLog("ERROR: hist["+i+"] es null/undef");return;}
+  // Buscar por posición — hist puede tener gaps en índices
+  const keys=Object.keys(hist);
+  appLog("keys="+JSON.stringify(keys.slice(0,3)));
+  const r=hist[i]||hist[keys[i]]||Object.values(hist)[i];
+  if(!r){appLog("ERROR: no encontrado en pos "+i+" keys="+keys.length);return;}
   appLog("r existe mag="+r.mag);
   try{
     appLog("A");
