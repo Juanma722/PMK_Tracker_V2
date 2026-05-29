@@ -485,26 +485,35 @@ function selDet(i){
   si=i;
   rHist();
   const r=hist[i];
-  if(!r)return;
-  document.getElementById('dts').textContent=fTS(r.ts);
-  document.getElementById('dmet').style.display='grid';
-  document.getElementById('dMag').textContent=r.mag!=null?Number(r.mag).toFixed(0):'—';
-  document.getElementById('dSnr').textContent=r.snr!=null?Number(r.snr).toFixed(2):'—';
-  document.getElementById('dRatio').textContent=r.ratio!=null?(Number(r.ratio)*100).toFixed(1)+'%':'—';
-  document.getElementById('dFreq').textContent=r.freq!=null?Number(r.freq).toFixed(2)+' Hz':'—';
-  const lat=Number(r.lat||0),lon=Number(r.lon||0);
-  document.getElementById('dgps').textContent=(lat!==0&&lon!==0)?`GPS: ${lat.toFixed(5)}, ${lon.toFixed(5)}`:'GPS: sin datos';
-  document.getElementById('dph').style.display='none';
-  const fft=Array.isArray(r.fft)?r.fft:new Array(NB).fill(0);
-  const mx=Math.max(...fft,100);
-  cd.options.scales.y.max=Math.ceil(mx*1.2);
-  cd.data.datasets[0].data=fft;
-  const pd=new Array(NB).fill(null);
-  let pb=BL,pv=0;
-  for(let j=BL;j<=BH;j++){if(fft[j]>pv){pv=fft[j];pb=j;}}
-  if(pv>0)pd[pb]=pv;
-  cd.data.datasets[1].data=pd;
-  cd.update('none');
+  if(!r){appLog("ERROR: hist["+i+"] es null");return;}
+  appLog("r.mag="+r.mag+" r.ts="+r.ts);
+  try{
+    document.getElementById('dts').textContent=fTS(r.ts);
+    document.getElementById('dmet').style.display='grid';
+    document.getElementById('dMag').textContent=r.mag!=null?Number(r.mag).toFixed(0):'—';
+    document.getElementById('dSnr').textContent=r.snr!=null?Number(r.snr).toFixed(2):'—';
+    document.getElementById('dRatio').textContent=r.ratio!=null?(Number(r.ratio)*100).toFixed(1)+'%':'—';
+    document.getElementById('dFreq').textContent=r.freq!=null?Number(r.freq).toFixed(2)+' Hz':'—';
+    appLog("métricas OK");
+    const lat=Number(r.lat||0),lon=Number(r.lon||0);
+    document.getElementById('dgps').textContent=(lat!==0&&lon!==0)?`GPS: ${lat.toFixed(5)}, ${lon.toFixed(5)}`:'GPS: sin datos';
+    document.getElementById('dph').style.display='none';
+    appLog("dph oculto");
+    const fft=Array.isArray(r.fft)?r.fft:new Array(NB).fill(0);
+    appLog("fft.length="+fft.length+" max="+Math.max(...fft));
+    const mx=Math.max(...fft,100);
+    cd.options.scales.y.max=Math.ceil(mx*1.2);
+    cd.data.datasets[0].data=fft;
+    const pd=new Array(NB).fill(null);
+    let pb=BL,pv=0;
+    for(let j=BL;j<=BH;j++){if(fft[j]>pv){pv=fft[j];pb=j;}}
+    if(pv>0)pd[pb]=pv;
+    cd.data.datasets[1].data=pd;
+    cd.update('none');
+    appLog("chart actualizado OK");
+  }catch(err){
+    appLog("ERROR en selDet: "+err.message);
+  }
 }
 
 function appLog(msg){
